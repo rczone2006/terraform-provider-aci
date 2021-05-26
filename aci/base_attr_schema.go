@@ -4,12 +4,12 @@ import "github.com/hashicorp/terraform-plugin-sdk/helper/schema"
 
 func GetBaseAttrSchema() map[string]*schema.Schema {
 	return map[string]*schema.Schema{
-		"description": &schema.Schema{
+		"description": {
 			Type:     schema.TypeString,
 			Optional: true,
 			Computed: true,
 		},
-		"annotation": &schema.Schema{
+		"annotation": {
 			Type:     schema.TypeString,
 			Optional: true,
 			Default:  "orchestrator:terraform",

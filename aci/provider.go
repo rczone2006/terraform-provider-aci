@@ -57,14 +57,14 @@ func Provider() terraform.ResourceProvider {
 
 		ResourcesMap: map[string]*schema.Resource{
 			
-			"aci_application_epg":                          resourceAciApplicationEPG(),
+			
 			"aci_tenant":                                   resourceAciTenant(),
 			
 		},
 
 		DataSourcesMap: map[string]*schema.Resource{
 		
-			"aci_application_epg":                          dataSourceAciApplicationEPG(),
+		
 			"aci_tenant":                                   dataSourceAciTenant(),
 			
 		},
