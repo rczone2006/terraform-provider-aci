@@ -16,12 +16,12 @@ func dataSourceAciTenant() *schema.Resource {
 
 		Schema: AppendBaseAttrSchema(map[string]*schema.Schema{
 
-			"name": &schema.Schema{
+			"name": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
 
-			"name_alias": &schema.Schema{
+			"name_alias": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,

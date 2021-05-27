@@ -11,43 +11,43 @@ import (
 func Provider() terraform.ResourceProvider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
-			"username": &schema.Schema{
+			"username": {
 				Type:        schema.TypeString,
 				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("ACI_USERNAME", nil),
 				Description: "Username for the APIC Account",
 			},
-			"password": &schema.Schema{
+			"password": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("ACI_PASSWORD", nil),
 				Description: "Password for the APIC Account",
 			},
-			"url": &schema.Schema{
+			"url": {
 				Type:        schema.TypeString,
 				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("ACI_URL", nil),
 				Description: "URL of the Cisco ACI web interface",
 			},
-			"insecure": &schema.Schema{
+			"insecure": {
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     true,
 				Description: "Allow insecure HTTPS client",
 			},
-			"private_key": &schema.Schema{
+			"private_key": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("ACI_PRIVATE_KEY", nil),
 				Description: "Private key path for signature calculation",
 			},
-			"cert_name": &schema.Schema{
+			"cert_name": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("ACI_CERT_NAME", nil),
 				Description: "Certificate name for the User in Cisco ACI.",
 			},
-			"proxy_url": &schema.Schema{
+			"proxy_url": {
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("ACI_PROXY_URL", nil),
@@ -94,20 +94,20 @@ func configureClient(d *schema.ResourceData) (interface{}, error) {
 func (c Config) Valid() error {
 
 	if c.Username == "" {
-		return fmt.Errorf("Username must be provided for the ACI provider")
+		return fmt.Errorf("username must be provided for the ACI provider")
 	}
 
 	if c.Password == "" {
 		if c.PrivateKey == "" && c.Certname == "" {
 
-			return fmt.Errorf("Either of private_key/cert_name or password is required")
+			return fmt.Errorf("either of private_key/cert_name or password is required")
 		} else if c.PrivateKey == "" || c.Certname == "" {
 			return fmt.Errorf("private_key and cert_name both must be provided")
 		}
 	}
 
 	if c.URL == "" {
-		return fmt.Errorf("The URL must be provided for the ACI provider")
+		return fmt.Errorf("the URL must be provided for the ACI provider")
 	}
 
 	return nil

@@ -29,25 +29,25 @@ func resourceAciRest() *schema.Resource {
 		SchemaVersion: 1,
 
 		Schema: map[string]*schema.Schema{
-			"path": &schema.Schema{
+			"path": {
 				Type:     schema.TypeString,
 				Required: true,
 			},
 			// we set it automatically if file config is provided
-			"class_name": &schema.Schema{
+			"class_name": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
-			"content": &schema.Schema{
+			"content": {
 				Type:     schema.TypeMap,
 				Optional: true,
 			},
-			"dn": &schema.Schema{
+			"dn": {
 				Type:     schema.TypeString,
 				Computed: true,
 			},
-			"payload": &schema.Schema{
+			"payload": {
 				Type:     schema.TypeString,
 				Optional: true,
 			},
@@ -133,20 +133,20 @@ func PostAndSetStatus(d *schema.ResourceData, m interface{}, status string) (*co
 			}
 
 		} else {
-			return nil, errors.New("The className is required when content is provided explicitly")
+			return nil, errors.New("the className is required when content is provided explicitly")
 		}
 
 	} else if payload, ok := d.GetOk("payload"); ok {
 		payloadStr := payload.(string)
 		if len(payloadStr) == 0 {
-			return nil, fmt.Errorf("Payload cannot be empty string")
+			return nil, fmt.Errorf("payload cannot be empty string")
 		}
 		yamlJsonPayload, err := yaml.YAMLToJSON([]byte(payloadStr))
 		if err != nil {
 			// It may be possible that the payload is in JSON
 			jsonPayload, err := container.ParseJSON([]byte(payloadStr))
 			if err != nil {
-				return nil, fmt.Errorf("Invalid format for yaml/JSON payload")
+				return nil, fmt.Errorf("invalid format for yaml/JSON payload")
 			}
 			cont = jsonPayload
 		} else {
@@ -154,15 +154,15 @@ func PostAndSetStatus(d *schema.ResourceData, m interface{}, status string) (*co
 			cont, err = container.ParseJSON(yamlJsonPayload)
 
 			if err != nil {
-				return nil, fmt.Errorf("Failed to convert YAML to JSON.")
+				return nil, fmt.Errorf("failed to convert YAML to JSON.")
 			}
 		}
 		if err != nil {
-			return nil, fmt.Errorf("Unable to parse the payload to JSON. Please check your payload")
+			return nil, fmt.Errorf("unable to parse the payload to JSON. Please check your payload")
 		}
 
 	} else {
-		return nil, fmt.Errorf("Either of payload or content is required")
+		return nil, fmt.Errorf("either of payload or content is required")
 	}
 	var output map[string]interface{}
 	err_output := json.Unmarshal([]byte(cont.String()), &output)

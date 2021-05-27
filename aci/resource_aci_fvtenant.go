@@ -24,25 +24,25 @@ func resourceAciTenant() *schema.Resource {
 
 		Schema: AppendBaseAttrSchema(map[string]*schema.Schema{
 
-			"name": &schema.Schema{
+			"name": {
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
 
-			"name_alias": &schema.Schema{
+			"name_alias": {
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
 
-			"relation_fv_rs_tn_deny_rule": &schema.Schema{
+			"relation_fv_rs_tn_deny_rule": {
 				Type:     schema.TypeSet,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Optional: true,
 				Set:      schema.HashString,
 			},
-			"relation_fv_rs_tenant_mon_pol": &schema.Schema{
+			"relation_fv_rs_tenant_mon_pol": {
 				Type: schema.TypeString,
 
 				Optional: true,
@@ -59,7 +59,7 @@ func getRemoteTenant(client *client.Client, dn string) (*models.Tenant, error) {
 	fvTenant := models.TenantFromContainer(fvTenantCont)
 
 	if fvTenant.DistinguishedName == "" {
-		return nil, fmt.Errorf("Tenant %s not found", fvTenant.DistinguishedName)
+		return nil, fmt.Errorf("tenant %s not found", fvTenant.DistinguishedName)
 	}
 
 	return fvTenant, nil
