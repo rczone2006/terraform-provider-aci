@@ -24,25 +24,25 @@ func resourceAciTenant() *schema.Resource {
 
 		Schema: AppendBaseAttrSchema(map[string]*schema.Schema{
 
-			"name": {
+			"name": &schema.Schema{
 				Type:     schema.TypeString,
 				Required: true,
 				ForceNew: true,
 			},
 
-			"name_alias": {
+			"name_alias": &schema.Schema{
 				Type:     schema.TypeString,
 				Optional: true,
 				Computed: true,
 			},
 
-			"relation_fv_rs_tn_deny_rule": {
+			"relation_fv_rs_tn_deny_rule": &schema.Schema{
 				Type:     schema.TypeSet,
 				Elem:     &schema.Schema{Type: schema.TypeString},
 				Optional: true,
 				Set:      schema.HashString,
 			},
-			"relation_fv_rs_tenant_mon_pol": {
+			"relation_fv_rs_tenant_mon_pol": &schema.Schema{
 				Type: schema.TypeString,
 
 				Optional: true,
@@ -59,7 +59,7 @@ func getRemoteTenant(client *client.Client, dn string) (*models.Tenant, error) {
 	fvTenant := models.TenantFromContainer(fvTenantCont)
 
 	if fvTenant.DistinguishedName == "" {
-		return nil, fmt.Errorf("tenant %s not found", fvTenant.DistinguishedName)
+		return nil, fmt.Errorf("Tenant %s not found", fvTenant.DistinguishedName)
 	}
 
 	return fvTenant, nil
@@ -119,23 +119,23 @@ func resourceAciTenantCreate(d *schema.ResourceData, m interface{}) error {
 	}
 	d.Partial(true)
 
-	//d.SetPartial("name")
+	d.SetPartial("name")
 
 	d.Partial(false)
 
 	checkDns := make([]string, 0, 1)
 
-	/*if relationTofvRsTnDenyRule, ok := d.GetOk("relation_fv_rs_tn_deny_rule"); ok {
+	if relationTofvRsTnDenyRule, ok := d.GetOk("relation_fv_rs_tn_deny_rule"); ok {
 		relationParamList := toStringList(relationTofvRsTnDenyRule.(*schema.Set).List())
 		for _, relationParam := range relationParamList {
-			checkDns = append(checkDns, relationParam) 
-		
+			checkDns = append(checkDns, relationParam)
+		}
 	}
 
 	if relationTofvRsTenantMonPol, ok := d.GetOk("relation_fv_rs_tenant_mon_pol"); ok {
 		relationParam := relationTofvRsTenantMonPol.(string)
 		checkDns = append(checkDns, relationParam)
-	} */
+	}
 
 	d.Partial(true)
 	err = checkTDn(aciClient, checkDns)
@@ -153,7 +153,7 @@ func resourceAciTenantCreate(d *schema.ResourceData, m interface{}) error {
 				return err
 			}
 			d.Partial(true)
-		//	d.SetPartial("relation_fv_rs_tn_deny_rule")
+			d.SetPartial("relation_fv_rs_tn_deny_rule")
 			d.Partial(false)
 		}
 	}

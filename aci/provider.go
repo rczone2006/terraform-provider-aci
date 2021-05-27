@@ -11,43 +11,43 @@ import (
 func Provider() terraform.ResourceProvider {
 	return &schema.Provider{
 		Schema: map[string]*schema.Schema{
-			"username": {
+			"username": &schema.Schema{
 				Type:        schema.TypeString,
 				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("ACI_USERNAME", nil),
 				Description: "Username for the APIC Account",
 			},
-			"password": {
+			"password": &schema.Schema{
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("ACI_PASSWORD", nil),
 				Description: "Password for the APIC Account",
 			},
-			"url": {
+			"url": &schema.Schema{
 				Type:        schema.TypeString,
 				Required:    true,
 				DefaultFunc: schema.EnvDefaultFunc("ACI_URL", nil),
 				Description: "URL of the Cisco ACI web interface",
 			},
-			"insecure": {
+			"insecure": &schema.Schema{
 				Type:        schema.TypeBool,
 				Optional:    true,
 				Default:     true,
 				Description: "Allow insecure HTTPS client",
 			},
-			"private_key": {
+			"private_key": &schema.Schema{
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("ACI_PRIVATE_KEY", nil),
 				Description: "Private key path for signature calculation",
 			},
-			"cert_name": {
+			"cert_name": &schema.Schema{
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("ACI_CERT_NAME", nil),
 				Description: "Certificate name for the User in Cisco ACI.",
 			},
-			"proxy_url": {
+			"proxy_url": &schema.Schema{
 				Type:        schema.TypeString,
 				Optional:    true,
 				DefaultFunc: schema.EnvDefaultFunc("ACI_PROXY_URL", nil),
@@ -56,15 +56,11 @@ func Provider() terraform.ResourceProvider {
 		},
 
 		ResourcesMap: map[string]*schema.Resource{
-			
-			
 			"aci_tenant":                                   resourceAciTenant(),
 			
 		},
 
 		DataSourcesMap: map[string]*schema.Resource{
-		
-		
 			"aci_tenant":                                   dataSourceAciTenant(),
 			
 		},
@@ -94,20 +90,20 @@ func configureClient(d *schema.ResourceData) (interface{}, error) {
 func (c Config) Valid() error {
 
 	if c.Username == "" {
-		return fmt.Errorf("username must be provided for the ACI provider")
+		return fmt.Errorf("Username must be provided for the ACI provider")
 	}
 
 	if c.Password == "" {
 		if c.PrivateKey == "" && c.Certname == "" {
 
-			return fmt.Errorf("either of private_key/cert_name or password is required")
+			return fmt.Errorf("Either of private_key/cert_name or password is required")
 		} else if c.PrivateKey == "" || c.Certname == "" {
 			return fmt.Errorf("private_key and cert_name both must be provided")
 		}
 	}
 
 	if c.URL == "" {
-		return fmt.Errorf("the URL must be provided for the ACI provider")
+		return fmt.Errorf("The URL must be provided for the ACI provider")
 	}
 
 	return nil
