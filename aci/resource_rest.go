@@ -18,7 +18,7 @@ const Deleted = "deleted"
 var class string
 
 const ErrDistinguishedNameNotFound = "The Dn is not present in the content"
-
+/*
 func resourceAciRest() *schema.Resource {
 	return &schema.Resource{
 		Create: resourceAciRestCreate,
@@ -104,14 +104,14 @@ func resourceAciRestDelete(d *schema.ResourceData, m interface{}) error {
 	}
 	d.SetId("")
 	return nil
-}
+}   */
 
 func GetDN(d *schema.ResourceData, m interface{}) string {
 	aciClient := m.(*client.Client)
 	path := d.Get("path").(string)
 	cont, _ := aciClient.GetViaURL(path)
 	dn := models.StripQuotes(models.StripSquareBrackets(cont.Search("imdata", class, "attributes", "dn").String()))
-	return fmt.Sprintf("%s", dn)
+    return dn
 }
 
 // PostAndSetStatus is used to post schema and set the status
@@ -154,7 +154,7 @@ func PostAndSetStatus(d *schema.ResourceData, m interface{}, status string) (*co
 			cont, err = container.ParseJSON(yamlJsonPayload)
 
 			if err != nil {
-				return nil, fmt.Errorf("failed to convert YAML to JSON.")
+				return nil, fmt.Errorf("failed to convert YAML to JSON")
 			}
 		}
 		if err != nil {
